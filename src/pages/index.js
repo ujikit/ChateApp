@@ -8,6 +8,10 @@ import Home from './Home';
 import Message from './Message';
 import Profile from './Profile';
 import Chatting from './Chatting';
+import SettingProfile from './SettingProfile';
+import EditPassword from './EditPassword';
+import EditProfile from './EditProfile';
+import ShareMoments from './ShareMoments';
 
 export {
   Splash,
@@ -20,4 +24,8 @@ export {
   Message,
   Profile,
   Chatting,
+  SettingProfile,
+  EditPassword,
+  EditProfile,
+  ShareMoments,
 };

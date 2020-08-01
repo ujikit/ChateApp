@@ -11,8 +11,8 @@ export default function ProfilePhoto({name, email}) {
         <Image source={photo} style={styles.img} />
       </TouchableOpacity>
 
-      <Text style={styles.name}>{name}</Text>
-      <Text style={styles.email}>{email}</Text>
+      {name ? <Text style={styles.name}>{name}</Text> : null}
+      {name ? <Text style={styles.email}>{email}</Text> : null}
     </View>
   );
 }

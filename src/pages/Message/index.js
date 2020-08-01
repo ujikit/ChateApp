@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import {SearchBar, ChatItem} from '../../component';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ListItem, SearchBar} from '../../component';
 import {colors, fonts} from '../../utils';
 
 export default function Message({navigation}) {
   const [search, setSearch] = useState('');
+  const url =
+    'https://images.unsplash.com/photo-1595920323353-c569b20ca15a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80';
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -12,18 +15,12 @@ export default function Message({navigation}) {
         <Text style={styles.title}>Message</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ChatItem onPress={() => navigation.navigate('Chatting')} />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
-        <ChatItem />
+        <ListItem
+          onPress={() => navigation.navigate('Chatting')}
+          photo={{uri: url}}
+          name="Alexander"
+          desc="Halo selamat pagi..."
+        />
       </ScrollView>
     </View>
   );

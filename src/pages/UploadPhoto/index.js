@@ -4,7 +4,7 @@ import ProfilePhoto from '../../component/molekul/ProfilePhoto';
 import {colors, fonts} from '../../utils';
 import {Button, Link, Gap} from '../../component';
 
-export default function UploadPhoto() {
+export default function UploadPhoto({navigation}) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Upload Photo</Text>

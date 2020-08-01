@@ -1,14 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {colors, fonts} from '../../../utils';
 
-export default function UserProfile() {
+export default function UserProfile({onPress}) {
   const url =
     'https://images.unsplash.com/photo-1595920323353-c569b20ca15a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80';
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <LinearGradient
         colors={[
           colors.linier.color3,
@@ -25,7 +25,7 @@ export default function UserProfile() {
         style={
           styles.desc
         }>{`Indonesia - East Java - Tulungagung \nDeveloper App`}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

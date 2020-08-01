@@ -10,16 +10,18 @@ import {IcPost} from '../../assets';
 import {PostContent, UserProfile} from '../../component';
 import {colors, fonts} from '../../utils';
 
-export default function Profile() {
+export default function Profile({navigation}) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.title}>Your Profile</Text>
-        <UserProfile />
+        <UserProfile onPress={() => navigation.navigate('SettingProfile')} />
 
         {/* post photo */}
 
-        <TouchableOpacity style={styles.postPhoto}>
+        <TouchableOpacity
+          style={styles.postPhoto}
+          onPress={() => navigation.navigate('ShareMoments')}>
           <IcPost />
           <Text style={styles.post}>post your moments</Text>
         </TouchableOpacity>

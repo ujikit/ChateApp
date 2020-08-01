@@ -12,6 +12,10 @@ import {
   Message,
   Profile,
   Chatting,
+  SettingProfile,
+  EditPassword,
+  EditProfile,
+  ShareMoments,
 } from '../pages';
 import {TabNavigator} from '../component';
 
@@ -20,9 +24,7 @@ const Tab = createBottomTabNavigator();
 
 export const MainApp = () => {
   return (
-    <Tab.Navigator
-      tabBar={(props) => <TabNavigator {...props} />}
-      tabBarOptions={{keyboardHidesTabBar: true}}>
+    <Tab.Navigator tabBar={(props) => <TabNavigator {...props} />}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen
         name="Message"
@@ -36,7 +38,7 @@ export const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="MainApp">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -75,6 +77,26 @@ const Router = () => {
       <Stack.Screen
         name="Chatting"
         component={Chatting}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SettingProfile"
+        component={SettingProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditPassword"
+        component={EditPassword}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ShareMoments"
+        component={ShareMoments}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
