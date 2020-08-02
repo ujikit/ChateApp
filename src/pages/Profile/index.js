@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,16 +6,37 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {IcPost} from '../../assets';
+import {IcPost, NullPhoto} from '../../assets';
 import {PostContent, UserProfile} from '../../component';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, getData} from '../../utils';
 
 export default function Profile({navigation}) {
+  const [profile, setProfile] = useState({
+    photo: NullPhoto,
+    fullName: '',
+    profession: '',
+    desc: 'edit your profile to add bio',
+  });
+
+  useEffect(() => {
+    getData('user').then((res) => {
+      const data = res;
+      data.photo = res?.photo?.length > 1 ? {uri: res.photo} : NullPhoto;
+      setProfile(res);
+    });
+  }, []);
+  console.log('data', profile);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.title}>Your Profile</Text>
-        <UserProfile onPress={() => navigation.navigate('SettingProfile')} />
+        <UserProfile
+          onPress={() => navigation.navigate('SettingProfile', profile)}
+          photo={profile.photo}
+          name={profile.fullName}
+          desc={profile.desc}
+        />
 
         {/* post photo */}
 

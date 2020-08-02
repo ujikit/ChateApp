@@ -1,31 +1,84 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {Button, Gap, InputText, Header} from '../../component';
-import {colors} from '../../utils';
+import {colors, useForm, showError, showSuccess, storeData} from '../../utils';
+import {Fire} from '../../config';
+import {useDispatch} from 'react-redux';
+import Loading from '../../component/atom/Loading';
 
 export default function Daftar({navigation}) {
+  const [loading, setLoading] = useState(false);
+  const [form, SetForm] = useForm({
+    fullName: '',
+    noPhone: '',
+    email: '',
+    password: '',
+  });
+
+  const Register = () => {
+    setLoading(true);
+
+    Fire.auth()
+      .createUserWithEmailAndPassword(form.email, form.password)
+      .then((res) => {
+        const data = {
+          fullName: form.fullName,
+          noPhone: form.noPhone,
+          email: form.email,
+          uid: res.user.uid,
+        };
+        Fire.database().ref(`users/${res.user.uid}/`).set(data);
+        storeData('user', data);
+        SetForm('reset');
+        setLoading(false);
+        showSuccess('Register Success');
+        navigation.replace('UploadPhoto', data);
+      })
+      .catch(function (error) {
+        showError(error.message);
+        setLoading(false);
+      });
+  };
+
   return (
-    <View style={styles.container}>
-      <Header title="Daftar Akun" onPress={() => navigation.goBack()} />
-      <View style={styles.content}>
-        <View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <InputText title="Full Name" />
-            <Gap height={24} />
-            <InputText title="Email Address" />
-            <Gap height={24} />
-            <InputText title="No Phone" />
-            <Gap height={24} />
-            <InputText title="Password" secureTextEntry />
-          </ScrollView>
+    <>
+      <View style={styles.container}>
+        <Header title="Daftar Akun" onPress={() => navigation.goBack()} />
+        <View style={styles.content}>
+          <View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <InputText
+                title="Full Name"
+                value={form.fullName}
+                onChangeText={(value) => SetForm('fullName', value)}
+              />
+              <Gap height={24} />
+              <InputText
+                title="No Phone"
+                value={form.noPhone}
+                onChangeText={(value) => SetForm('noPhone', value)}
+              />
+              <Gap height={24} />
+              <InputText
+                title="Email Address"
+                value={form.email}
+                onChangeText={(value) => SetForm('email', value)}
+              />
+              <Gap height={24} />
+              <InputText
+                title="Password"
+                secureTextEntry
+                value={form.password}
+                onChangeText={(value) => SetForm('password', value)}
+              />
+            </ScrollView>
+          </View>
+          <Gap height={30} />
+          <Button title="Sing Up" onPress={Register} />
         </View>
-        <Gap height={30} />
-        <Button
-          title="Sing Up"
-          onPress={() => navigation.replace('UploadPhoto')}
-        />
       </View>
-    </View>
+      {loading && <Loading />}
+    </>
   );
 }
 

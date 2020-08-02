@@ -1,39 +1,86 @@
-import React from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {IlLogo} from '../../assets';
-import {InputText, Link, Button, Gap} from '../../component';
-import {fonts, colors} from '../../utils';
+import {Button, Gap, InputText, Link} from '../../component';
+import {
+  colors,
+  fonts,
+  useForm,
+  showSuccess,
+  showError,
+  storeData,
+} from '../../utils';
+import Loading from '../../component/atom/Loading';
+import {Fire} from '../../config';
 
 export default function Login({navigation}) {
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useForm({
+    email: '',
+    password: '',
+  });
+
+  const Login = () => {
+    setLoading(true);
+    Fire.auth()
+      .signInWithEmailAndPassword(form.email, form.password)
+      .then((res) => {
+        setLoading(false);
+        Fire.database()
+          .ref(`users/${res.user.uid}/`)
+          .once('value')
+          .then((resDB) => {
+            if (resDB.val()) {
+              storeData('user', resDB.val());
+              navigation.replace('MainApp');
+            }
+          });
+        showSuccess('Login Success');
+      })
+      .catch(function (error) {
+        setLoading(false);
+        showError(error.message);
+      });
+  };
+
   return (
-    <View style={styles.container}>
-      <View>
-        <IlLogo />
-        <Text
-          style={styles.text}>{`Start your day\nby greeting the world`}</Text>
+    <>
+      <View style={styles.container}>
+        <View>
+          <IlLogo />
+          <Text
+            style={styles.text}>{`Start your day\nby greeting the world`}</Text>
+        </View>
+        <View>
+          <InputText
+            title="Email Address"
+            value={form.email}
+            onChangeText={(value) => setForm('email', value)}
+          />
+          <Gap height={24} />
+          <InputText
+            title="Password"
+            secureTextEntry
+            value={form.password}
+            onChangeText={(value) => setForm('password', value)}
+          />
+          <Gap height={30} />
+          <Link
+            title="Forgot Password"
+            onPress={() => navigation.navigate('ForgotPass')}
+          />
+          <Gap height={15} />
+          <Button title="Sing In" onPress={Login} />
+          <Gap height={15} />
+          <Link
+            align="center"
+            title="Create New Account"
+            onPress={() => navigation.navigate('Daftar')}
+          />
+        </View>
       </View>
-      <View>
-        <InputText title="Email Address" />
-        <Gap height={24} />
-        <InputText title="Password" secureTextEntry />
-        <Gap height={30} />
-        <Link
-          title="Forgot Password"
-          onPress={() => navigation.navigate('ForgotPass')}
-        />
-        <Gap height={15} />
-        <Button
-          title="Sing In"
-          onPress={() => navigation.replace('MainApp')}
-        />
-        <Gap height={15} />
-        <Link
-          align="center"
-          title="Create New Account"
-          onPress={() => navigation.navigate('Daftar')}
-        />
-      </View>
-    </View>
+      {loading && <Loading />}
+    </>
   );
 }
 

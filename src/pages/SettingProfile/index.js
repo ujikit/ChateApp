@@ -2,13 +2,25 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Header, ListItem, Gap} from '../../component';
 import {colors, fonts} from '../../utils';
+import {Fire} from '../../config';
 
-export default function SettingProfile({navigation}) {
+export default function SettingProfile({navigation, route}) {
+  const {fullName, email, photo, desc} = route.params;
+  const Singout = () => {
+    Fire.auth()
+      .signOut()
+      .then(function () {
+        navigation.replace('GetStarted');
+      })
+      .catch(function (error) {
+        // An error happened.
+      });
+  };
   return (
     <View style={styles.container}>
       <Header title="Profile" onPress={() => navigation.goBack()} />
       <View style={styles.content}>
-        <Text style={styles.name}>Hi, Jhon.jhone</Text>
+        <Text style={styles.name}>{`Hi, ${fullName}`}</Text>
         <Text style={styles.desc}>is there anything we can help you with?</Text>
       </View>
       <Gap height={58} />
@@ -24,15 +36,12 @@ export default function SettingProfile({navigation}) {
         desc="Keep Your Account Safe"
         onPress={() => navigation.navigate('EditPassword')}
       />
-      <ListItem
-        icon="rate"
-        name="Give Us Rate"
-        desc="On Google Play Store"
-      />
+      <ListItem icon="rate" name="Give Us Rate" desc="On Google Play Store" />
       <ListItem
         icon="singout"
         name="Sing Out"
         desc="Exit The Aplication"
+        onPress={Singout}
       />
     </View>
   );

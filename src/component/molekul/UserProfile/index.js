@@ -3,10 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {colors, fonts} from '../../../utils';
 
-export default function UserProfile({onPress}) {
-  const url =
-    'https://images.unsplash.com/photo-1595920323353-c569b20ca15a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80';
-
+export default function UserProfile({onPress, photo, name, desc}) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <LinearGradient
@@ -17,14 +14,11 @@ export default function UserProfile({onPress}) {
         ]}
         style={styles.border}>
         <View style={styles.border2}>
-          <Image source={{uri: url}} style={styles.photo} />
+          <Image source={photo} style={styles.photo} />
         </View>
       </LinearGradient>
-      <Text style={styles.name}>Jhon.jhone</Text>
-      <Text
-        style={
-          styles.desc
-        }>{`Indonesia - East Java - Tulungagung \nDeveloper App`}</Text>
+      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.desc}>{desc}</Text>
     </TouchableOpacity>
   );
 }

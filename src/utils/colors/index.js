@@ -11,6 +11,9 @@ const mainColor = {
   purpel1: '#9F1EBF',
   blue1: '#4913DF',
   blue2: '#8FB5FF',
+  green1: '#0bcad4',
+  black1: '#000000',
+  black2: 'rgba(0,0,0,0.5)',
 };
 
 export const colors = {
@@ -45,5 +48,14 @@ export const colors = {
   inputchat: {
     primary: mainColor.grey5,
     btn: mainColor.dark2,
+  },
+  message: {
+    error: mainColor.red1,
+    success: mainColor.green1,
+  },
+  loadingBackground: mainColor.black2,
+  disable: {
+    background: mainColor.grey3,
+    text: mainColor.grey1,
   },
 };

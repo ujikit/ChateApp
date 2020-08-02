@@ -3,11 +3,10 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {NullPhoto} from '../../../assets';
 import {colors, fonts} from '../../../utils';
 
-export default function ProfilePhoto({name, email}) {
-  const [photo, setPhoto] = useState(NullPhoto);
+export default function ProfilePhoto({name, email, onPress, photo}) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.border} onPress={() => alert('Ok')}>
+      <TouchableOpacity style={styles.border} onPress={onPress}>
         <Image source={photo} style={styles.img} />
       </TouchableOpacity>
 

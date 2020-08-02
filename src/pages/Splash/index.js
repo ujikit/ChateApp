@@ -3,16 +3,25 @@ import {StyleSheet, Text, View} from 'react-native';
 import {IlLogo} from '../../assets';
 import {colors, fonts} from '../../utils';
 import {color} from 'react-native-reanimated';
+import {Fire} from '../../config';
 
 export default function Splash({navigation}) {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('GetStarted');
-    }, 3000);
-  }, []);
+    const unsubscribe = Fire.auth().onAuthStateChanged((user) => {
+      setTimeout(() => {
+        if (user) {
+          navigation.replace('MainApp');
+        } else {
+          navigation.replace('GetStarted');
+        }
+      }, 3000);
+    });
+
+    return () => unsubscribe();
+  }, [navigation]);
   return (
     <View style={styles.container}>
-      <IlLogo width={100} height={100}/>
+      <IlLogo width={100} height={100} />
       <Text style={styles.title}>ChateApp</Text>
     </View>
   );
