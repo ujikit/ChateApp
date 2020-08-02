@@ -20,30 +20,25 @@ const Viewmore = {
   },
 };
 
-export default function ActivityFriend() {
+export default function ActivityFriend({photo, desc, name, imageContent}) {
   const url =
     'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80';
   return (
     <View style={styles.page}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <Image source={{uri: url}} style={styles.profile} />
+          <Image source={{uri: photo}} style={styles.profile} />
 
-          <Text style={styles.name}>Jhon.jhone</Text>
+          <Text style={styles.name}>{name}</Text>
         </View>
-        <Image source={{uri: url}} style={styles.image} />
+        <Image source={{uri: imageContent}} style={styles.image} />
         <View>
           <ViewMoreText
             numberOfLines={1}
             renderViewMore={Viewmore.renderViewMore}
             renderViewLess={Viewmore.renderViewLess}
             textStyle={styles.desc}>
-            <Text>
-              Lorem ipsum dolor sit amet, in quo dolorum ponderum, nam veri
-              molestie constituto eu. Eum enim tantas sadipscing ne, ut omnes
-              malorum nostrum cum. Errem populo qui ne, ea ipsum antiopam
-              definitionem eos.
-            </Text>
+            <Text>{desc}</Text>
           </ViewMoreText>
         </View>
       </View>

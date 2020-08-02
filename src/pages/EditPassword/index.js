@@ -1,10 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Header, Gap, InputText, Button} from '../../component';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, showSuccess, showError} from '../../utils';
 import {IlLogo} from '../../assets';
+import {Fire} from '../../config';
 
-export default function ForgotPass({navigation}) {
+export default function ForgotPass({navigation, route}) {
+  const {email, fullName} = route.params;
+  const [send, setSend] = useState(email);
+
+  const Reset = () => {
+    var auth = Fire.auth();
+    auth
+      .sendPasswordResetEmail(email)
+      .then((res) => {
+        showSuccess('The email was sent successfully');
+        navigation.navigate('Profile');
+      })
+      .catch((err) => {
+        showError(err.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Header title="Reset Password" onPress={() => navigation.goBack()} />
@@ -15,9 +32,9 @@ export default function ForgotPass({navigation}) {
           <Text style={styles.title}>Do you have access to this email?</Text>
         </View>
         <Gap height={80} />
-        <InputText title="Email Address" disable />
+        <InputText title="Email Address" disable value={send} />
         <Gap height={120} />
-        <Button title="Send Link" onPress={()=> navigation.navigate('Profile')}/>
+        <Button title="Send Link" onPress={Reset} />
       </View>
     </View>
   );

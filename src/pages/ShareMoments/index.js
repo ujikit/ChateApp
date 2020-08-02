@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TextInput} from 'react-native';
-import {Header, Button, Gap} from '../../component';
+import React, {useState, useEffect} from 'react';
+import {Image, StyleSheet, TextInput, View} from 'react-native';
+import {Button, Gap, Header} from '../../component';
 import {colors, fonts} from '../../utils';
+import {Fire} from '../../config';
 
-export default function ShareMoments({navigation}) {
+export default function ShareMoments({navigation, route}) {
+  const {photo, uid, fullName, avatar} = route.params;
+  const [moments, setMoments] = useState('');
   const [border, setBorder] = useState(colors.border.secondary);
   const onFocusForm = () => {
     setBorder(colors.border.active);
@@ -11,8 +14,32 @@ export default function ShareMoments({navigation}) {
   const onBlurFrom = () => {
     setBorder(colors.border.secondary);
   };
-  const url =
-    'https://images.unsplash.com/photo-1595920323353-c569b20ca15a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80';
+
+  const today = new Date();
+
+  useEffect(() => {});
+
+  const UploadData = () => {
+    const data = {
+      photo: photo,
+      uid: uid,
+      fullName: fullName,
+      content: moments,
+      avatar: avatar,
+    };
+
+    console.log(data);
+
+    const url = `content/${uid}/${today}/`;
+
+    console.log(data);
+    Fire.database()
+      .ref(url)
+      .set(data)
+      .then((res) => {
+        navigation.navigate('Profile');
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -22,7 +49,7 @@ export default function ShareMoments({navigation}) {
       />
       <View style={styles.content}>
         <View style={{alignItems: 'center'}}>
-          <Image source={{uri: url}} style={styles.image} />
+          <Image source={{uri: photo}} style={styles.image} />
         </View>
         <Gap height={50} />
         <TextInput
@@ -30,12 +57,11 @@ export default function ShareMoments({navigation}) {
           placeholder="Share Your Experience"
           onFocus={onFocusForm}
           onBlur={onBlurFrom}
+          value={moments}
+          onChangeText={(value) => setMoments(value)}
         />
         <Gap height={150} />
-        <Button
-          title="Continue"
-          onPress={() => navigation.navigate('Profile')}
-        />
+        <Button title="Continue" onPress={UploadData} />
       </View>
     </View>
   );

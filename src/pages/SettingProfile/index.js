@@ -6,6 +6,14 @@ import {Fire} from '../../config';
 
 export default function SettingProfile({navigation, route}) {
   const {fullName, email, photo, desc} = route.params;
+
+  const data = {
+    email: email,
+    fullName: fullName,
+    photo: photo,
+    desc: desc,
+  };
+
   const Singout = () => {
     Fire.auth()
       .signOut()
@@ -34,7 +42,7 @@ export default function SettingProfile({navigation, route}) {
         icon="edit_pass"
         name="Change Your Password"
         desc="Keep Your Account Safe"
-        onPress={() => navigation.navigate('EditPassword')}
+        onPress={() => navigation.navigate('EditPassword', data)}
       />
       <ListItem icon="rate" name="Give Us Rate" desc="On Google Play Store" />
       <ListItem
