@@ -1,9 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { IlWelcome } from '../../assets';
-import { Button, Gap, Link } from '../../component';
-import { colors, fonts } from '../../utils';
-
+import {StyleSheet, Text, View} from 'react-native';
+import {IlWelcome} from '../../assets';
+import {Button, Gap, Link} from '../../component';
+import {colors, fonts} from '../../utils';
 
 export default function GetStarted({navigation}) {
   return (
@@ -17,7 +16,7 @@ export default function GetStarted({navigation}) {
         <Button title="Sing In" onPress={() => navigation.navigate('Login')} />
         <Gap height={16} />
         <Link
-          align='center'
+          align="center"
           title="Create New Account"
           onPress={() => navigation.navigate('Daftar')}
         />
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
     flex: 1,
     justifyContent: 'space-between',
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
   },
   title: {
     fontSize: 24,

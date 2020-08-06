@@ -6,12 +6,10 @@ import ActivityFriend from './ActivityFriend';
 import SearchBar from './SearchBar';
 import ListItem from './ListItem';
 import UserProfile from './UserProfile';
-import PostContent from './PostContent';
 import ChatContent from './ChatContent';
 import IsMe from './IsMe';
 import Other from './Other';
 import InputChat from './InputChat';
-
 
 export {
   Header,
@@ -22,7 +20,6 @@ export {
   SearchBar,
   ListItem,
   UserProfile,
-  PostContent,
   ChatContent,
   IsMe,
   Other,

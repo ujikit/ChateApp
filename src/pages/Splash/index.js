@@ -29,7 +29,7 @@ export default function Splash({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

@@ -39,7 +39,7 @@ export default function ListItem({onPress, name, desc, photo, icon}) {
 
 const styles = StyleSheet.create({
   container: {
-    borderBottomColor: colors.border.secondary,
+    borderBottomColor: colors.dark2,
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',

@@ -7,7 +7,7 @@ export default function Button({onPress, title, type, Header, disable}) {
   if (Header === 'Header') {
     return (
       <TouchableOpacity onPress={onPress}>
-        {type == 'Dark' ? <IcBackLight /> : <IcBackDark />}
+        {type == 'Dark' ? <IcBackLight /> : <IcBackLight />}
       </TouchableOpacity>
     );
   }
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    color: colors.white,
+    color: colors.text.primary,
     textAlign: 'center',
     fontFamily: fonts.primary.normal,
   },

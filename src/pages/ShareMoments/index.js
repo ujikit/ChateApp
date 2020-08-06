@@ -5,7 +5,7 @@ import {colors, fonts} from '../../utils';
 import {Fire} from '../../config';
 
 export default function ShareMoments({navigation, route}) {
-  const {photo, uid, fullName, avatar} = route.params;
+  const {imageContent, profile} = route.params;
   const [moments, setMoments] = useState('');
   const [border, setBorder] = useState(colors.border.secondary);
   const onFocusForm = () => {
@@ -15,28 +15,36 @@ export default function ShareMoments({navigation, route}) {
     setBorder(colors.border.secondary);
   };
 
-  const today = new Date();
+  // date
 
-  useEffect(() => {});
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 2;
+  const date = today.getDate();
+  const hours = today.getHours();
+  const minutes = today.getMinutes();
+
+  const thisDate = `${year}-${month}-${date}`;
+
+  // useEffect(() => {});
 
   const UploadData = () => {
     const data = {
-      photo: photo,
-      uid: uid,
-      fullName: fullName,
+      photo: profile.photo.uri,
+      uid: profile.uid,
+      fullName: profile.fullName,
       content: moments,
-      avatar: avatar,
+      imageContent: imageContent,
     };
 
-    console.log(data);
+    const url = `content/${profile.uid}`;
+    const urlUser = `contentUser`;
 
-    const url = `content/${uid}/${today}/`;
-
-    console.log(data);
     Fire.database()
       .ref(url)
-      .set(data)
+      .push(data)
       .then((res) => {
+        Fire.database().ref(urlUser).push(data);
         navigation.navigate('Profile');
       });
   };
@@ -49,7 +57,7 @@ export default function ShareMoments({navigation, route}) {
       />
       <View style={styles.content}>
         <View style={{alignItems: 'center'}}>
-          <Image source={{uri: photo}} style={styles.image} />
+          <Image source={{uri: imageContent}} style={styles.image} />
         </View>
         <Gap height={50} />
         <TextInput
@@ -69,7 +77,7 @@ export default function ShareMoments({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
   },
   content: {
@@ -82,9 +90,10 @@ const styles = StyleSheet.create({
     paddingTop: 35,
   },
   input: (border) => ({
-    borderBottomColor: border,
+    borderBottomColor: colors.border,
     borderBottomWidth: 1,
     fontFamily: fonts.primary[600],
     color: colors.text.primary,
+    // backgroundColor: colors.dark2,
   }),
 });

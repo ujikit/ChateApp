@@ -42,7 +42,7 @@ export default function ForgotPass({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
   },
   content: {

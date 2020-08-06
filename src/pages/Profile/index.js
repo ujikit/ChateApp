@@ -1,26 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
-import {IcPost, NullPhoto} from '../../assets';
-import {PostContent, UserProfile} from '../../component';
-import {colors, fonts, getData, showError} from '../../utils';
 import ImagePicker from 'react-native-image-picker';
+import {IcPost, NullPhoto} from '../../assets';
+import {UserProfile} from '../../component';
 import {Fire} from '../../config';
+import {colors, fonts, getData, showError} from '../../utils';
+
+const windowWidth = Dimensions.get('window').width;
+const photo = windowWidth / 3 - 17;
 
 export default function Profile({navigation}) {
   const [profile, setProfile] = useState({
     photo: NullPhoto,
     fullName: '',
     profession: '',
-    desc: 'edit your profile to add bio',
     uid: '',
+    bio: '',
   });
-  const [photoForDB, setPhotoForDB] = useState('');
+  const [photoContent, setPhotoContent] = useState('');
+  const [content, setContent] = useState([]);
 
   useEffect(() => {
     getData('user').then((res) => {
@@ -33,10 +39,8 @@ export default function Profile({navigation}) {
   // upload PhotoData
 
   const data = {
-    photo: photoForDB,
-    uid: profile.uid,
-    fullName: profile.fullName,
-    avatar: profile.photo,
+    imageContent: photoContent,
+    profile: profile,
   };
 
   const options = {
@@ -53,53 +57,86 @@ export default function Profile({navigation}) {
 
   const UploadMoments = () => {
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
         showError(`You don't take pictures`);
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        showError('ImagePicker Error: ', response.error);
       } else {
         const photoData = response.uri;
-        setPhotoForDB(photoData);
+        setPhotoContent(photoData);
         navigation.navigate('ShareMoments', data);
       }
     });
   };
 
-  // data content
+  useEffect(() => {
+    // data content
 
-  // const url = `content/${profile.uid}/`;
-  // Fire.database()
-  //   .ref(url)
-  //   .on('value')
-  //   .then((resDB) => {
-  //     if (resDB.val()) {
-  //       console.log(resDB.val());
-  //     }
-  //   });
+    const url = `content/${profile.uid}/`;
+    Fire.database()
+      .ref(url)
+      .on('value', (content) => {
+        if (content.val()) {
+          const dataContent = content.val();
+          const allDataContent = [];
+          const newData = [];
+
+          Object.keys(dataContent).map((itemContent) => {
+            newData.push({
+              id: itemContent,
+              data: dataContent[itemContent],
+            });
+          });
+
+          Object.keys(newData).map((item) => {
+            allDataContent.push({
+              id: item,
+              data: newData[item],
+            });
+          });
+
+          setContent(newData);
+        }
+      });
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
       <View style={styles.container}>
-        <Text style={styles.title}>Your Profile</Text>
-        <UserProfile
-          onPress={() => navigation.navigate('SettingProfile', profile)}
-          photo={profile.photo}
-          name={profile.fullName}
-          desc={profile.desc}
-        />
+        <View style={styles.content}>
+          <Text style={styles.title}>Your Profile</Text>
+          <UserProfile
+            onPress={() => navigation.navigate('SettingProfile', profile)}
+            photo={profile.photo}
+            name={profile.fullName}
+            desc={profile.bio}
+          />
 
-        {/* post photo */}
+          {/* post photo */}
 
-        <TouchableOpacity style={styles.postPhoto} onPress={UploadMoments}>
-          <IcPost />
-          <Text style={styles.post}>post your moments</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.postPhoto} onPress={UploadMoments}>
+            <IcPost />
+            <Text style={styles.post}>post your moments</Text>
+          </TouchableOpacity>
+        </View>
 
-        {/* ====== */}
-
-        <PostContent />
+        {/* data Content */}
+        <>
+          <View style={styles.containerContent}>
+            <Text style={styles.titleContent}>Post</Text>
+            <View style={styles.contentContent}>
+              {content.map((item) => {
+                return (
+                  <Image
+                    key={item.id}
+                    source={{uri: item.data.imageContent}}
+                    style={styles.photoContent}
+                  />
+                );
+              })}
+            </View>
+          </View>
+        </>
       </View>
     </ScrollView>
   );
@@ -108,14 +145,14 @@ export default function Profile({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     paddingHorizontal: 16,
     paddingVertical: 20,
-    alignItems: 'center',
   },
+  content: {alignItems: 'center', flex: 1},
   page: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
   },
   title: {
     textAlign: 'center',
@@ -138,5 +175,25 @@ const styles = StyleSheet.create({
     color: colors.text.secondary,
     fontFamily: fonts.primary[600],
     textAlign: 'center',
+  },
+  containerContent: {
+    flex: 1,
+    maxWidth: windowWidth,
+  },
+  titleContent: {
+    fontSize: 18,
+    fontFamily: fonts.primary[700],
+    color: colors.text.primary,
+    paddingTop: 20,
+  },
+  contentContent: {
+    flexDirection: 'row',
+    paddingTop: 10,
+    flexWrap: 'wrap',
+  },
+  photoContent: {
+    height: photo,
+    width: photo,
+    margin: 3,
   },
 });

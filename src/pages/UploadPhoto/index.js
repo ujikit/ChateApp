@@ -83,7 +83,7 @@ export default function UploadPhoto({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     paddingHorizontal: 16,
     paddingVertical: 40,
   },

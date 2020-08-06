@@ -1,6 +1,7 @@
 const mainColor = {
-  white: '#ffffff',
-  dark1: '#15224f',
+  dark: '#1C2022',
+  dark1: '#2F3134',
+  light1: '#ffffff',
   dark2: '#5B85D7',
   grey1: '#8e8e8e',
   grey2: '#C2C2C2',
@@ -17,9 +18,10 @@ const mainColor = {
 };
 
 export const colors = {
-  white: mainColor.white,
+  dark: mainColor.dark,
+  dark2: mainColor.dark1,
   text: {
-    primary: mainColor.dark1,
+    primary: mainColor.light1,
     secondary: mainColor.grey1,
     active: mainColor.dark2,
     inactive: mainColor.grey2,

@@ -27,11 +27,11 @@ export default function ActivityFriend({photo, desc, name, imageContent}) {
     <View style={styles.page}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <Image source={{uri: photo}} style={styles.profile} />
+          <Image source={photo} style={styles.profile} />
 
           <Text style={styles.name}>{name}</Text>
         </View>
-        <Image source={{uri: imageContent}} style={styles.image} />
+        <Image source={imageContent} style={styles.image} />
         <View>
           <ViewMoreText
             numberOfLines={1}
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   page: {
     margin: 16,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark2,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -1,17 +1,19 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {Header, ListItem, Gap} from '../../component';
-import {colors, fonts} from '../../utils';
+import {Gap, Header, ListItem} from '../../component';
 import {Fire} from '../../config';
+import {colors, fonts} from '../../utils';
 
 export default function SettingProfile({navigation, route}) {
-  const {fullName, email, photo, desc} = route.params;
+  const {fullName, email, photo, bio, uid, noPhone} = route.params;
 
   const data = {
     email: email,
     fullName: fullName,
     photo: photo,
-    desc: desc,
+    bio: bio,
+    uid: uid,
+    noPhone: noPhone,
   };
 
   const Singout = () => {
@@ -36,7 +38,7 @@ export default function SettingProfile({navigation, route}) {
         icon="edit_profile"
         name="Edit Profile"
         desc="Edit Profile As Desired"
-        onPress={() => navigation.navigate('EditProfile')}
+        onPress={() => navigation.navigate('EditProfile', data)}
       />
       <ListItem
         icon="edit_pass"
@@ -57,7 +59,7 @@ export default function SettingProfile({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
   },
   content: {

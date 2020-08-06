@@ -5,42 +5,48 @@ import {colors, fonts, getData} from '../../utils';
 import {Fire} from '../../config';
 
 export default function Home() {
-  const window = Dimensions.get('window');
   const [content, setContent] = useState([]);
-  const [user, setUser] = useState('');
+  const [profile, setProfile] = useState({
+    fullName: '',
+    profession: '',
+    uid: '',
+    bio: '',
+  });
 
   useEffect(() => {
     getData('user').then((res) => {
-      setUser(res);
+      setProfile(res);
     });
-    const urlFirebase = `content/`;
+  }, []);
 
+  useEffect(() => {
+    const url = `contentUser/`;
     Fire.database()
-      .ref(urlFirebase)
-      .on('value', (snapshot) => {
-        if (snapshot.val()) {
-          const dataSnapshot = snapshot.val();
-          const allDataChat = [];
-          Object.keys(dataSnapshot).map((key) => {
-            const dataContent = dataSnapshot[key];
-            const newData = [];
+      .ref(url)
+      .on('value', (content) => {
+        if (content.val()) {
+          const dataContent = content.val();
+          const allDataContent = [];
+          const newData = [];
 
-            Object.keys(dataContent).map((item) => {
-              newData.push({
-                id: item,
-                data: dataContent[item],
-              });
+          Object.keys(dataContent).map((itemContent) => {
+            newData.push({
+              id: itemContent,
+              data: dataContent[itemContent],
             });
-
-            allDataChat.push({
-              id: key,
-              data: newData,
-            });
-            setContent(newData);
           });
+
+          Object.keys(newData).map((item) => {
+            allDataContent.push({
+              id: item,
+              data: newData[item],
+            });
+          });
+
+          setContent(newData);
         }
       });
-  }, [user.uid]);
+  }, []);
 
   console.log(content);
 
@@ -49,13 +55,14 @@ export default function Home() {
       <Text style={styles.title}>Activity</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {content.map((item) => {
+          console.log('data', item);
           return (
             <ActivityFriend
-              // key={item.id}
+              key={item.id}
               name={item.data.fullName}
               desc={item.data.content}
-              imageContent={item.data.photo}
-              photo={item.data.avatar.uri}
+              imageContent={{uri: item.data.imageContent}}
+              photo={{uri: item.data.photo}}
             />
           );
         })}
@@ -67,7 +74,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
   },
   title: {
     textAlign: 'center',

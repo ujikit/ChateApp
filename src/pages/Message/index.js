@@ -11,7 +11,7 @@ export default function Message({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <Text style={styles.title}>Message</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -29,7 +29,7 @@ export default function Message({navigation}) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
   },
   content: {paddingHorizontal: 16},

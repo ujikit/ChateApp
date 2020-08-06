@@ -6,7 +6,7 @@ import {colors} from '../../../utils';
 export default function Loading() {
   return (
     <View style={styles.container}>
-      <WaveIndicator color={colors.white} size={70} />
+      <WaveIndicator color={colors.text.primary} size={70} />
     </View>
   );
 }

@@ -11,7 +11,7 @@ export default function TabNavigator({state, descriptors, navigation}) {
   }
 
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const label =
@@ -49,7 +49,6 @@ export default function TabNavigator({state, descriptors, navigation}) {
             active={isFocused}
             onLongPress={onLongPress}
             onPress={onPress}
-            
           />
         );
       })}
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 44,
     paddingVertical: 10,
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark2,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

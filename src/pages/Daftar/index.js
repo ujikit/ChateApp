@@ -3,7 +3,6 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 import {Button, Gap, InputText, Header} from '../../component';
 import {colors, useForm, showError, showSuccess, storeData} from '../../utils';
 import {Fire} from '../../config';
-import {useDispatch} from 'react-redux';
 import Loading from '../../component/atom/Loading';
 
 export default function Daftar({navigation}) {
@@ -17,6 +16,7 @@ export default function Daftar({navigation}) {
 
   const Register = () => {
     setLoading(true);
+    // navigation.replace('UploadPhoto');
 
     Fire.auth()
       .createUserWithEmailAndPassword(form.email, form.password)
@@ -26,6 +26,7 @@ export default function Daftar({navigation}) {
           noPhone: form.noPhone,
           email: form.email,
           uid: res.user.uid,
+          bio: 'Edit Your Biodata',
         };
         Fire.database().ref(`users/${res.user.uid}/`).set(data);
         storeData('user', data);
@@ -84,7 +85,7 @@ export default function Daftar({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.dark,
     flex: 1,
   },
   content: {
