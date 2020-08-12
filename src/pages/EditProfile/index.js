@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Gap, Header, InputText, ProfilePhoto} from '../../component';
 import {colors, useForm, storeData, showError} from '../../utils';
@@ -7,8 +7,7 @@ import ImagePicker from 'react-native-image-picker';
 
 export default function EditProfile({navigation, route}) {
   const {fullName, email, photo, bio, uid, noPhone} = route.params;
-  // const [photo, setPhoto] = useState(NullPhoto);
-  // const [photoForDB, setPhotoForDB] = useState('');
+  const [photoForDB, setPhotoForDB] = useState('');
   const [profile, setProfile] = useForm({
     email: email,
     fullName: fullName.length <= 0 ? '' : fullName,
@@ -18,15 +17,13 @@ export default function EditProfile({navigation, route}) {
     noPhone: noPhone,
   });
 
-  const photoData = profile.photo.uri;
-
   const dataNew = {
     fullName: profile.fullName,
     noPhone: profile.noPhone,
     email: profile.email,
     uid: profile.uid,
     bio: profile.bio.length <= 0 ? 'Edit Your Biodata' : profile.bio,
-    photo: photoData,
+    photo: photoForDB.length <= 0 ? photo.uri : photoForDB,
   };
 
   // Upload Photo
@@ -38,9 +35,6 @@ export default function EditProfile({navigation, route}) {
       skipBackup: true,
       path: 'images',
     },
-    quality: 0.8,
-    maxWidth: 200,
-    maxHeight: 200,
   };
 
   const UploadPhoto = () => {
@@ -55,6 +49,7 @@ export default function EditProfile({navigation, route}) {
         const source = {uri: response.uri};
 
         setProfile('photo', source);
+        setPhotoForDB(`data:${response.type};base64, ${response.data}`);
 
         // setPhotoForDB(photoData);
       }

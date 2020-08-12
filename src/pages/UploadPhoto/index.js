@@ -20,9 +20,6 @@ export default function UploadPhoto({navigation, route}) {
       skipBackup: true,
       path: 'images',
     },
-    quality: 0.8,
-    maxWidth: 200,
-    maxHeight: 200,
   };
 
   const UploadPhoto = () => {
@@ -35,10 +32,8 @@ export default function UploadPhoto({navigation, route}) {
         console.log('ImagePicker Error: ', response.error);
       } else {
         const source = {uri: response.uri};
-        const photoData = response.uri;
-
         setPhoto(source);
-        setPhotoForDB(photoData);
+        setPhotoForDB(`data:${response.type};base64, ${response.data}`);
         setHasPhoto(true);
       }
     });

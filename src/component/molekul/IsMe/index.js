@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     fontFamily: fonts.primary.normal,
-    color: colors.white,
+    color: colors.text.primary,
   },
   date: {
     fontSize: 11,

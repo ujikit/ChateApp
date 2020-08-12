@@ -6,23 +6,17 @@ import {Fire} from '../../config';
 
 export default function Home() {
   const [content, setContent] = useState([]);
-  const [profile, setProfile] = useState({
-    fullName: '',
-    profession: '',
-    uid: '',
-    bio: '',
-  });
 
   useEffect(() => {
-    getData('user').then((res) => {
-      setProfile(res);
-    });
-  }, []);
+    getDataFire();
+  }, [content.uid]);
 
-  useEffect(() => {
+  const getDataFire = () => {
     const url = `contentUser/`;
     Fire.database()
       .ref(url)
+      .orderByChild('date')
+      .limitToLast(50)
       .on('value', (content) => {
         if (content.val()) {
           const dataContent = content.val();
@@ -44,18 +38,16 @@ export default function Home() {
           });
 
           setContent(newData);
+          // console.log(newData);
         }
       });
-  }, []);
-
-  console.log(content);
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Activity</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
         {content.map((item) => {
-          console.log('data', item);
           return (
             <ActivityFriend
               key={item.id}

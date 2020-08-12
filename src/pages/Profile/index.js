@@ -8,7 +8,6 @@ import {
   View,
   Image,
 } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 import {IcPost, NullPhoto} from '../../assets';
 import {UserProfile} from '../../component';
 import {Fire} from '../../config';
@@ -19,86 +18,41 @@ const photo = windowWidth / 3 - 17;
 
 export default function Profile({navigation}) {
   const [profile, setProfile] = useState({
-    photo: NullPhoto,
-    fullName: '',
-    profession: '',
     uid: '',
-    bio: '',
   });
-  const [photoContent, setPhotoContent] = useState('');
+  // const [photoContent, setPhotoContent] = useState('');
   const [content, setContent] = useState([]);
 
   useEffect(() => {
     getData('user').then((res) => {
       const data = res;
       data.photo = res?.photo?.length > 1 ? {uri: res.photo} : NullPhoto;
-      setProfile(res);
+      setProfile(data);
     });
-  }, []);
+    getDataFire();
+  }, [profile.uid]);
 
   // upload PhotoData
 
-  const data = {
-    imageContent: photoContent,
-    profile: profile,
-  };
-
-  const options = {
-    title: 'Select Your Photo',
-
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
-    quality: 0.8,
-    maxWidth: 200,
-    maxHeight: 200,
-  };
-
-  const UploadMoments = () => {
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        showError(`You don't take pictures`);
-      } else if (response.error) {
-        showError('ImagePicker Error: ', response.error);
-      } else {
-        const photoData = response.uri;
-        setPhotoContent(photoData);
-        navigation.navigate('ShareMoments', data);
-      }
-    });
-  };
-
-  useEffect(() => {
-    // data content
-
-    const url = `content/${profile.uid}/`;
+  const getDataFire = () => {
+    const url = `contentUser/`;
     Fire.database()
       .ref(url)
       .on('value', (content) => {
         if (content.val()) {
           const dataContent = content.val();
-          const allDataContent = [];
           const newData = [];
-
-          Object.keys(dataContent).map((itemContent) => {
+          Object.keys(dataContent).map((item) => {
             newData.push({
-              id: itemContent,
-              data: dataContent[itemContent],
-            });
-          });
-
-          Object.keys(newData).map((item) => {
-            allDataContent.push({
               id: item,
-              data: newData[item],
+              data: dataContent[item],
             });
           });
 
           setContent(newData);
         }
       });
-  }, []);
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.page}>
@@ -107,14 +61,13 @@ export default function Profile({navigation}) {
           <Text style={styles.title}>Your Profile</Text>
           <UserProfile
             onPress={() => navigation.navigate('SettingProfile', profile)}
-            photo={profile.photo}
-            name={profile.fullName}
-            desc={profile.bio}
           />
 
           {/* post photo */}
 
-          <TouchableOpacity style={styles.postPhoto} onPress={UploadMoments}>
+          <TouchableOpacity
+            style={styles.postPhoto}
+            onPress={() => navigation.navigate('ShareMoments', profile)}>
             <IcPost />
             <Text style={styles.post}>post your moments</Text>
           </TouchableOpacity>
@@ -126,13 +79,18 @@ export default function Profile({navigation}) {
             <Text style={styles.titleContent}>Post</Text>
             <View style={styles.contentContent}>
               {content.map((item) => {
-                return (
-                  <Image
-                    key={item.id}
-                    source={{uri: item.data.imageContent}}
-                    style={styles.photoContent}
-                  />
-                );
+                const isMe = item.data.uid === profile.uid;
+                console.log(isMe);
+                if (isMe) {
+                  return (
+                    <Image
+                      key={item.id}
+                      source={{uri: item.data.imageContent}}
+                      style={styles.photoContent}
+                    />
+                  );
+                }
+                return <View />;
               })}
             </View>
           </View>

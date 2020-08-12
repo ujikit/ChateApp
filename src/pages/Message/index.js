@@ -1,12 +1,57 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ListItem, SearchBar} from '../../component';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, getData} from '../../utils';
+import {Fire} from '../../config';
 
 export default function Message({navigation}) {
-  const [search, setSearch] = useState('');
-  const url =
-    'https://images.unsplash.com/photo-1595920323353-c569b20ca15a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80';
+  const [content, setContent] = useState([]);
+  const [profile, setProfile] = useState({
+    uid: '',
+  });
+
+  useEffect(() => {
+    getDataUser();
+    GetDataFire();
+  }, [profile.uid]);
+
+  const getDataUser = () => {
+    getData('user').then((res) => {
+      setProfile(res);
+      console.log(res);
+    });
+  };
+
+  const GetDataFire = () => {
+    const url = `users/`;
+    Fire.database()
+      .ref(url)
+      .on('value', (content) => {
+        if (content.val()) {
+          const dataContent = content.val();
+          const allDataContent = [];
+          const newData = [];
+
+          Object.keys(dataContent).map((itemContent) => {
+            newData.push({
+              id: itemContent,
+              data: dataContent[itemContent],
+            });
+          });
+
+          Object.keys(newData).map((item) => {
+            allDataContent.push({
+              id: item,
+              data: newData[item],
+            });
+          });
+
+          setContent(newData);
+        }
+      });
+  };
+
+  // const [search, setSearch] = useState('');
 
   return (
     <View style={styles.container}>
@@ -15,12 +60,21 @@ export default function Message({navigation}) {
         <Text style={styles.title}>Message</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ListItem
-          onPress={() => navigation.navigate('Chatting')}
-          photo={{uri: url}}
-          name="Alexander"
-          desc="Halo selamat pagi..."
-        />
+        {content.map((item) => {
+          const data = item.data;
+          const isMe = item.data.uid === profile.uid;
+
+          return (
+            <ListItem
+              keys={item.uid}
+              onPress={() => navigation.navigate('Chatting', data)}
+              photo={{uri: item.data.photo}}
+              name={item.data.fullName}
+              desc={item.data.bio}
+              isMe={isMe}
+            />
+          );
+        })}
       </ScrollView>
     </View>
   );

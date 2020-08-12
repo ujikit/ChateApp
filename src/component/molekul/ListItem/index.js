@@ -9,7 +9,7 @@ import {
 } from '../../../assets';
 import {colors, fonts} from '../../../utils';
 
-export default function ListItem({onPress, name, desc, photo, icon}) {
+export default function ListItem({onPress, name, desc, photo, icon, isMe}) {
   const Icon = () => {
     if (icon === 'edit_profile') {
       return <IcEditProfile />;
@@ -25,6 +25,9 @@ export default function ListItem({onPress, name, desc, photo, icon}) {
     }
     return <IcEditProfile />;
   };
+  if (isMe) {
+    return <></>;
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       {icon ? <Icon /> : <Image source={photo} style={styles.profile} />}

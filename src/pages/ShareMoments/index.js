@@ -1,13 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, TextInput, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {Button, Gap, Header} from '../../component';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, showError, setDate, getTime} from '../../utils';
 import {Fire} from '../../config';
+import ImagePicker from 'react-native-image-picker';
+import {ImagePick} from '../../assets';
 
 export default function ShareMoments({navigation, route}) {
-  const {imageContent, profile} = route.params;
+  const {fullName, photo, uid} = route.params;
   const [moments, setMoments] = useState('');
+  const [imageMoments, setImageMoments] = useState(ImagePick);
   const [border, setBorder] = useState(colors.border.secondary);
+  const [momentsDb, setMomentsDb] = useState('');
+  const [hasPhoto, setHasPhoto] = useState(false);
+
   const onFocusForm = () => {
     setBorder(colors.border.active);
   };
@@ -15,38 +27,54 @@ export default function ShareMoments({navigation, route}) {
     setBorder(colors.border.secondary);
   };
 
-  // date
+  // Upload Photo
 
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 2;
-  const date = today.getDate();
-  const hours = today.getHours();
-  const minutes = today.getMinutes();
+  const options = {
+    title: 'Select Your Photo',
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
 
-  const thisDate = `${year}-${month}-${date}`;
+  const UploadMoments = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        showError(`You don't take pictures`);
+      } else if (response.error) {
+        showError('ImagePicker Error: ', response.error);
+      } else {
+        const source = {uri: response.uri};
+        setImageMoments(source);
+        setMomentsDb(`data:${response.type};base64, ${response.data}`);
+        setHasPhoto(true);
+      }
+    });
+  };
+
+  // ============
 
   // useEffect(() => {});
 
   const UploadData = () => {
+    const profile = photo.uri;
+    const today = new Date();
+
     const data = {
-      photo: profile.photo.uri,
-      uid: profile.uid,
-      fullName: profile.fullName,
+      photo: profile,
+      uid: uid,
+      fullName: fullName,
       content: moments,
-      imageContent: imageContent,
+      imageContent: momentsDb,
+      date: getTime(today) + setDate(today),
     };
 
-    const url = `content/${profile.uid}`;
+    console.log('data', data);
+
     const urlUser = `contentUser`;
 
-    Fire.database()
-      .ref(url)
-      .push(data)
-      .then((res) => {
-        Fire.database().ref(urlUser).push(data);
-        navigation.navigate('Profile');
-      });
+    Fire.database().ref(urlUser).push(data);
+    navigation.navigate('Profile');
   };
 
   return (
@@ -56,20 +84,23 @@ export default function ShareMoments({navigation, route}) {
         onPress={() => navigation.goBack()}
       />
       <View style={styles.content}>
-        <View style={{alignItems: 'center'}}>
-          <Image source={{uri: imageContent}} style={styles.image} />
-        </View>
+        <TouchableOpacity
+          style={{alignItems: 'center'}}
+          onPress={UploadMoments}>
+          <Image source={imageMoments} style={styles.image} />
+        </TouchableOpacity>
         <Gap height={50} />
         <TextInput
           style={styles.input(border)}
           placeholder="Share Your Experience"
+          placeholderTextColor={'white'}
           onFocus={onFocusForm}
           onBlur={onBlurFrom}
           value={moments}
           onChangeText={(value) => setMoments(value)}
         />
         <Gap height={150} />
-        <Button title="Continue" onPress={UploadData} />
+        <Button title="Continue" onPress={UploadData} disable={!hasPhoto} />
       </View>
     </View>
   );
@@ -88,9 +119,10 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
     paddingTop: 35,
+    borderRadius: 10,
   },
   input: (border) => ({
-    borderBottomColor: colors.border,
+    borderBottomColor: border,
     borderBottomWidth: 1,
     fontFamily: fonts.primary[600],
     color: colors.text.primary,

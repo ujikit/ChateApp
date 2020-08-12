@@ -27,6 +27,7 @@ export default function Daftar({navigation}) {
           email: form.email,
           uid: res.user.uid,
           bio: 'Edit Your Biodata',
+          photo: '',
         };
         Fire.database().ref(`users/${res.user.uid}/`).set(data);
         storeData('user', data);

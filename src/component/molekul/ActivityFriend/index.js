@@ -21,8 +21,6 @@ const Viewmore = {
 };
 
 export default function ActivityFriend({photo, desc, name, imageContent}) {
-  const url =
-    'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80';
   return (
     <View style={styles.page}>
       <View style={styles.container}>
