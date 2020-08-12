@@ -1,11 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {ListItem, SearchBar} from '../../component';
-import {colors, fonts, getData} from '../../utils';
+import {ListItem} from '../../component';
 import {Fire} from '../../config';
+import {colors, fonts, getData} from '../../utils';
+import LoaderMessage from '../../utils/LoaderMessage';
 
 export default function Message({navigation}) {
   const [content, setContent] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState({
     uid: '',
   });
@@ -23,6 +25,7 @@ export default function Message({navigation}) {
   };
 
   const GetDataFire = () => {
+    setLoading(true);
     const url = `users/`;
     Fire.database()
       .ref(url)
@@ -45,7 +48,7 @@ export default function Message({navigation}) {
               data: newData[item],
             });
           });
-
+          setLoading(false);
           setContent(newData);
         }
       });
@@ -59,7 +62,9 @@ export default function Message({navigation}) {
         {/* <SearchBar /> */}
         <Text style={styles.title}>Message</Text>
       </View>
+
       <ScrollView showsVerticalScrollIndicator={false}>
+        {loading && <LoaderMessage />}
         {content.map((item) => {
           const data = item.data;
           const isMe = item.data.uid === profile.uid;

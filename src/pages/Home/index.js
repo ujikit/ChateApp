@@ -1,17 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ActivityFriend} from '../../component';
-import {colors, fonts, getData} from '../../utils';
 import {Fire} from '../../config';
+import {colors, fonts} from '../../utils';
+import LoaderHome from '../../utils/Loader';
 
 export default function Home() {
   const [content, setContent] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getDataFire();
   }, [content.uid]);
 
   const getDataFire = () => {
+    setLoading(true);
     const url = `contentUser/`;
     Fire.database()
       .ref(url)
@@ -36,7 +39,7 @@ export default function Home() {
               data: newData[item],
             });
           });
-
+          setLoading(false);
           setContent(newData);
           // console.log(newData);
         }
@@ -47,6 +50,7 @@ export default function Home() {
     <View style={styles.container}>
       <Text style={styles.title}>Activity</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
+        {loading && <LoaderHome />}
         {content.map((item) => {
           return (
             <ActivityFriend

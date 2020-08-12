@@ -12,11 +12,13 @@ import {IcPost, NullPhoto} from '../../assets';
 import {UserProfile} from '../../component';
 import {Fire} from '../../config';
 import {colors, fonts, getData, showError} from '../../utils';
+import LoaderProfile from '../../utils/LoaderProfile';
 
 const windowWidth = Dimensions.get('window').width;
 const photo = windowWidth / 3 - 17;
 
 export default function Profile({navigation}) {
+  const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState({
     uid: '',
   });
@@ -35,6 +37,7 @@ export default function Profile({navigation}) {
   // upload PhotoData
 
   const getDataFire = () => {
+    setLoading(true);
     const url = `contentUser/`;
     Fire.database()
       .ref(url)
@@ -48,7 +51,7 @@ export default function Profile({navigation}) {
               data: dataContent[item],
             });
           });
-
+          setLoading(false);
           setContent(newData);
         }
       });
@@ -77,6 +80,8 @@ export default function Profile({navigation}) {
         <>
           <View style={styles.containerContent}>
             <Text style={styles.titleContent}>Post</Text>
+
+            {loading && <LoaderProfile />}
             <View style={styles.contentContent}>
               {content.map((item) => {
                 const isMe = item.data.uid === profile.uid;
