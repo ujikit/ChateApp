@@ -28,9 +28,9 @@ export default function InputChat({
   return (
     <View style={styles.container}>
       <View>
-        <TouchableOpacity style={styles.emot}>
+        {/* <TouchableOpacity style={styles.emot}>
           <IcEmot />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <TextInput
         style={styles.input}

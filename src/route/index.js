@@ -26,11 +26,7 @@ export const MainApp = () => {
   return (
     <Tab.Navigator tabBar={(props) => <TabNavigator {...props} />}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen
-        name="Message"
-        component={Message}
-        options={{keyboardHidesTabBar: true}}
-      />
+      <Tab.Screen name="Message" component={Message} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

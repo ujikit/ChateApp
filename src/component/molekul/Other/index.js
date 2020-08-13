@@ -7,9 +7,9 @@ export default function Other({text, date}) {
     <View style={styles.container}>
       <View>
         <View style={styles.contant}>
-          <Text style={styles.text}>Selamat Siang Juga</Text>
+          <Text style={styles.text}>{text}</Text>
         </View>
-        <Text style={styles.date}>4.31 PM</Text>
+        <Text style={styles.date}>{date}</Text>
       </View>
     </View>
   );

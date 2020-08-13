@@ -6,9 +6,9 @@ export default function IsMe({text, date}) {
   return (
     <View style={styles.container}>
       <View style={styles.contant}>
-        <Text style={styles.text}>Halo Selamat Siang</Text>
+        <Text style={styles.text}>{text}</Text>
       </View>
-      <Text style={styles.date}>4.30 PM</Text>
+      <Text style={styles.date}>{date}</Text>
     </View>
   );
 }

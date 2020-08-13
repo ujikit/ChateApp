@@ -5,6 +5,7 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 const photo = windowWidth / 3 - 17;
+const width = windowWidth - 32;
 
 const LoaderProfile = (props) => {
   return (
@@ -18,9 +19,8 @@ const LoaderProfile = (props) => {
           backgroundColor="#2f3134"
           foregroundColor="#1c2022"
           {...props}>
-          <Rect x="0" y="20" rx="2" ry="2" width={photo} height={photo} />
-          <Rect x="124" y="20" rx="2" ry="2" width={photo} height={photo} />
-          <Rect x="248" y="20" rx="2" ry="2" width={photo} height={photo} />
+          <Rect x="0" y="20" rx="2" ry="2" width={width} height={photo} />
+          <Rect x="0" y="140" rx="2" ry="2" width={width} height={photo} />
         </ContentLoader>
       </View>
     </View>

@@ -50,7 +50,6 @@ export default function Chatting({navigation, route}) {
 
     Fire.database()
       .ref(url)
-      .endAt(30)
       .on('value', (snapshot) => {
         if (snapshot.val()) {
           const dataSnapshot = snapshot.val();
@@ -88,10 +87,24 @@ export default function Chatting({navigation, route}) {
       />
       <View style={styles.content}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.date}>Senin, 21 Maret 2020</Text>
-          <Gap height={23} />
-          <ChatContent isMe />
-          <ChatContent />
+          {chatData.map((item) => {
+            return (
+              <View key={item.id}>
+                <Text style={styles.date}>{item.id}</Text>
+                <Gap height={23} />
+                {item.data.map((itemChat) => {
+                  const isMe = profile.uid === itemChat.data.sendBy;
+                  return (
+                    <ChatContent
+                      isMe={isMe}
+                      text={itemChat.data.chatContent}
+                      date={itemChat.data.chatTime}
+                    />
+                  );
+                })}
+              </View>
+            );
+          })}
         </ScrollView>
       </View>
       <InputChat
