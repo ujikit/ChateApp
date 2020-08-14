@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Image,
 } from 'react-native';
 import {IcPost, NullPhoto} from '../../assets';
 import {UserProfile} from '../../component';
 import {Fire} from '../../config';
-import {colors, fonts, getData, showError} from '../../utils';
+import {colors, fonts, getData} from '../../utils';
 import LoaderProfile from '../../utils/LoaderProfile';
 
 const windowWidth = Dimensions.get('window').width;

@@ -76,7 +76,7 @@ export default function Daftar({navigation}) {
             </ScrollView>
           </View>
           <Gap height={30} />
-          <Button title="Sing Up" onPress={Register} />
+          <Button title="Sign Up" onPress={Register} />
         </View>
       </View>
       {loading && <Loading />}

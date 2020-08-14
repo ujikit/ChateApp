@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Gap, Header, InputText, ProfilePhoto} from '../../component';
-import {colors, useForm, storeData, showError} from '../../utils';
+import {colors, useForm, storeData, showError, showSuccess} from '../../utils';
 import {Fire} from '../../config';
 import ImagePicker from 'react-native-image-picker';
 
@@ -61,7 +61,7 @@ export default function EditProfile({navigation, route}) {
   const uploadAndContinue = () => {
     Fire.database().ref(`users/${uid}/`).update(dataNew);
     storeData('user', dataNew);
-
+    showSuccess('Your profile has been updated successfully');
     navigation.navigate('Profile');
   };
 

@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: 'flex-end',
     flexDirection: 'row',
+    maxWidth: '80%',
   },
   contant: {
     padding: 12,
@@ -28,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.chat.other,
     borderRadius: 10,
     borderBottomLeftRadius: 0,
-    maxWidth: '80%',
   },
   text: {
     fontSize: 14,

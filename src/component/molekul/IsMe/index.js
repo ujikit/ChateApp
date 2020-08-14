@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.chat.isMe,
     borderRadius: 10,
     borderBottomRightRadius: 0,
-    maxWidth: '70%',
+    maxWidth: '80%',
   },
   text: {
     fontSize: 14,

@@ -32,10 +32,10 @@ export default function Login({navigation}) {
           .then((resDB) => {
             if (resDB.val()) {
               storeData('user', resDB.val());
+              showSuccess('Login Success');
               navigation.replace('MainApp');
             }
           });
-        showSuccess('Login Success');
       })
       .catch(function (error) {
         setLoading(false);

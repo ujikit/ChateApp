@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Dimensions} from 'react-native';
 import {Header, ChatContent, Gap, InputChat} from '../../component';
 import {fonts, colors, getData, setDateChat, getTimeChat} from '../../utils';
 import {Fire} from '../../config';
+
+const Width = Dimensions.get('window').width;
+const Height = Dimensions.get('window').height;
 
 export default function Chatting({navigation, route}) {
   const {fullName, photo, uid} = route.params;
@@ -27,8 +30,10 @@ export default function Chatting({navigation, route}) {
 
   const PushChat = () => {
     const today = new Date();
-    const chatId = `${profile.uid}_${uid}`;
-    const url = `chatting/${chatId}/allChat/${setDateChat(today)}`;
+    const chatIdUser = `${profile.uid}_${uid}`;
+    const chatId = `${uid}_${profile.uid}`;
+    const url = `chatting/${chatIdUser}/allChat/${setDateChat(today)}`;
+    const urlUser = `chatting/${chatId}/allChat/${setDateChat(today)}`;
     const dataChat = {
       sendBy: profile.uid,
       chatDate: new Date().getTime(),
@@ -40,39 +45,49 @@ export default function Chatting({navigation, route}) {
       .ref(url)
       .push(dataChat)
       .then((res) => {
+        Fire.database().ref(urlUser).push(dataChat);
         setChatContent('');
       });
   };
 
   const getChatData = () => {
-    const ChatId = `${profile.uid}_${uid}`;
+    const rootDb = Fire.database().ref();
+
+    const ChatIdUser = `${profile.uid}_${uid}`;
+    const ChatId = `${uid}_${profile.uid}`;
     const url = `chatting/${ChatId}/allChat/`;
+    const urlUser = `chatting/${ChatIdUser}/allChat/`;
+    const messageDb = rootDb.child(url);
 
-    Fire.database()
-      .ref(url)
-      .on('value', (snapshot) => {
-        if (snapshot.val()) {
-          const dataSnapshot = snapshot.val();
-          const allDataChat = [];
-          Object.keys(dataSnapshot).map((key) => {
-            const dataChat = dataSnapshot[key];
-            const newData = [];
+    messageDb.on('value', async (snapshot) => {
+      if (snapshot.val()) {
+        const dataSnapshot = snapshot.val();
+        const allDataChat = [];
+        const promises = await Object.keys(dataSnapshot).map(async (key) => {
+          // Join Database
+          const messageDbUser = await rootDb.child(urlUser).once('value');
 
-            Object.keys(dataChat).map((itemChat) => {
-              newData.push({
-                id: itemChat,
-                data: dataChat[itemChat],
-              });
-            });
+          const dataChat = dataSnapshot[key];
+          const newData = [];
 
-            allDataChat.push({
-              id: key,
-              data: newData,
+          Object.keys(dataChat).map((itemChat) => {
+            newData.push({
+              id: itemChat,
+              messageDbUser: messageDbUser.val(),
+              data: dataChat[itemChat],
             });
           });
-          setChatData(allDataChat);
-        }
-      });
+
+          allDataChat.push({
+            id: key,
+            data: newData,
+          });
+        });
+        await Promise.all(promises);
+        console.log('new data', allDataChat);
+        setChatData(allDataChat);
+      }
+    });
   };
 
   console.log(chatData);
@@ -86,7 +101,12 @@ export default function Chatting({navigation, route}) {
         photo={{uri: photo}}
       />
       <View style={styles.content}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={(scroll) => {
+            this.scroll = scroll;
+          }}
+          onContentSizeChange={() => this.scroll.scrollToEnd()}>
           {chatData.map((item) => {
             return (
               <View key={item.id}>

@@ -13,7 +13,7 @@ export default function GetStarted({navigation}) {
           style={styles.title}>{`Start your day\nby greeting the world`}</Text>
       </View>
       <View>
-        <Button title="Sing In" onPress={() => navigation.navigate('Login')} />
+        <Button title="Sign In" onPress={() => navigation.navigate('Login')} />
         <Gap height={16} />
         <Link
           align="center"
