@@ -5,16 +5,16 @@ ChateApp application source code | React Native
 
 This is a chat application project that uses React Native technology and Firebase realtime database.
 
-for the first time you do it.
-HTTPS: `git clone https: // github.com / amanu-nur / ChateApp.git`
-SSH: `git@github.com: amanu-nur / ChateApp.git`
-Github CLI: `gh repo clone amanu-nur / ChateApp`
+for the first time you do it. </br>
+HTTPS: `git clone https: // github.com / amanu-nur / ChateApp.git`</br>
+SSH: `git@github.com: amanu-nur / ChateApp.git`</br>
+Github CLI: `gh repo clone amanu-nur / ChateApp`</br>
 
-after finishing retrieving project data from Github please do it
+after finishing retrieving project data from Github please do it</br>
 
-`thread installation / npm` installation
+Yarn start / npm start</br>
 
-run the project on your android emulator.
+run the project on your android emulator.</br>
 
-`start` thread // for starting the server
-`android / ios` // threads to run to the emulator
+`yarn start` // to start the server</br>
+`yarn android / ios` // to run to the emulator</br>
